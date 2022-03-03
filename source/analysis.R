@@ -1,5 +1,5 @@
-jail_jurisdiction <- read.csv("~/Documents/info201assignments/a3-andrewle7/incarceration-trends/incarceration_trends_jail_jurisdiction.csv")
-incar_trends <-read.csv("~/Documents/info201assignments/a3-andrewle7/incarceration-trends/incarceration_trends.csv", stringsAsFactors =  FALSE)
+jail_jurisdiction <- read.csv("~/Documents/info201assignments/incarceration-trends/incarceration_trends_jail_jurisdiction.csv")
+incar_trends <-read.csv("~/Documents/info201assignments/incarceration-trends/incarceration_trends.csv", stringsAsFactors =  FALSE)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
