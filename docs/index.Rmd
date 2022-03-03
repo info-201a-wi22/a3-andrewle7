@@ -1,0 +1,38 @@
+---
+title: "Incarceration Report"
+author: Andrew Le
+output: html_document
+---
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+``` {r echo = FALSE}
+source("~/Documents/info201assignments/a3-andrewle7/source/analysis.R")
+```
+## Introduction
+In light of recent events, there have been many reports and news articles highlighting the unfair treatment of minorities, black people specifically, by the police across the country. In this report, we utilize the data given to us by Vera which has combined many different data sets from government official bureaus, and has recorded the incarceration rates by race, region, state, etc. from 1970 all the way to 2018. With this data, we can draw conclusions about the unfair treatment and incarceration of black people, and the disproportionate incarceration rates in which black people fall victim to. These values differ in various regions, as we will observe the US as a whole, and then break it down to a state level. 
+
+With all values averaged over a 50 year time period, in the US, black people make up **`r blackpercpop`%** of the total population, but make up **`r blackpercincar` %** of the total incarcerated population. Compare these statistics to those of white people, they take up a majority of the population, with **`r whitepercpop`%** of the total population, and making up **`r whitepercincar`%** of the total incarcerated population. Even though black people make up a fraction of the total population compared to white people, they are incarcerated almost as equivalently to white people. This shows a disproportionate incarceration rate compared to the total population black people make up- leading to the conclusion that they are unfairly incarcerated and prosecuted. As we break this down further, the region in which black people take up the lowest amount in the total incarcerated population is on the West Coast, with **`r westjblackperc`%** of the total incarcerated population being black whilst taking up **`r westtotalblackpop`%** of the total population. As we move to the South, this is where the black incarcerated population percentage is the largest in the 4 regions, with **`r highestjblackperc`%** of the total incarcerated population being black while making up **`r southtotalblackpop`%** of the total population in the South. As we can see, in the lowest and the highest region, the percentage in which black people are apart of the incarcerated population is extremely disproportionate to the total percentage of the total population that black people make up.
+
+## White vs. Black Incarceration Population Rates Over Time
+``` {r echo = FALSE}
+plot(overtimechart)
+```
+
+The graph shown above represents the percentage in which black and white people take up in both the total population as well as the total incarcerated population. The trends we see in this graph is a gradual decrease in the percentage of black people that take up the incarcerated population and an increase for white people in the same statistic. What isn't shown in the chart, but will be presented is the percentage of the total population black people take up compared to white people. If we are strictly looking at this graph, we see a bias in all the years prior to 2000, and then a steady decrease every year after that, but with more context that will be shown- we see that even with a decrease, and progress being made, black people are disproportionately incarcerated in the United States.
+
+## Black Jailed Population compared to Total Black Population in the US
+``` {r echo = FALSE}
+plot(variableplot)
+```
+
+In the scatter plot shown above, it compares two continuous variables, the percentage in which black people make up the total population (averaged over a 50 year time period), and the percentage in which black people make up the total jail population. We see a correlation between the two as the majority of the data is skewed more towards the right, indicating a much higher value of black people making up the jailed population compared to their actual population density in the population as a whole. Comparing this to the white population totals per say- we see that the percentage in the population taken up by them is **`r whitepercpop`%** of the population, whilst taking up ***`r whitepercpop`%*** of the total population on average. This graph showcases an average of **`r blackpercpop`%** of the population being taken up by black people with an average of **`r blackpercincar`% ** of the jailed population. This trend showcases once again, the disproportionate incarceration of the black population.
+
+## Geographical Trends Related to Jailing of Black Population
+```{r echo = FALSE}
+plot(jpercmap)
+```
+
+In the map shown above, we take a look at the geographical patterns that come up whilst focusing on the average percentage black people take up in the jailed population over the last 50 years by county. We use this variable to see how many how many in jail are black, and come up with conclusions and answers that may relate back to our claim. As we can see on the map, the areas in which the black population take up the most of the jailed population as a whole would be the South, the Midwest, and the East- with the West having very low numbers with a few outlying counties. We can see averages of as much as **75%** in some counties in the South and East, further backing up our claim of disproportionate incarceration of black people. With this map, we can break it down to regions in which racial bias is the highest, and where police forces need to be reformed. 
+
