@@ -1,5 +1,5 @@
 jail_jurisdiction <- read.csv("~/Documents/info201assignments/a3-andrewle7/incarceration-trends/incarceration_trends_jail_jurisdiction.csv")
-incar_trends <-read.csv("~/Documents/info201assignments/a3-andrewle7/incarceration-trends/incarceration_trends.csv")
+incar_trends <-read.csv("~/Documents/info201assignments/a3-andrewle7/incarceration-trends/incarceration_trends.csv", stringsAsFactors =  FALSE)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
@@ -101,6 +101,11 @@ overtimedata <- incar_trends %>%
 #legend
 colors <- c("Jailed Black Population" = "darkred", "Jailed White Population" = "steelblue")
 
+maplabels <- labs(
+  title = "Average Percentage of Black People in Total Jailed Population in US",
+  subtitle = "Data taken by Vera, from 1970 - 2018",
+)
+
 overtimechart <- ggplot(data = overtimedata, aes(x=year)) +
   geom_line(aes(y=blackjperc, color = "Jailed Black Population")) +
   geom_line(aes(y=whitejperc, color = "Jailed White Population")) +
@@ -131,4 +136,41 @@ variableplot <- ggplot(data = variabledata) +
     subtitle = "Data from ggplot2() incar_trends data frame.",
     caption = "Assignment 3 Continuous Variables Chart",
   )
+
+mapdf <- incar_trends %>%
+  group_by(fips)%>%
+  summarize(blackjperc = round(mean(black_jail_pop, na.rm=T) / mean(total_jail_pop,na.rm = T), 4)) %>%
+  filter(blackjperc< 1) %>%
+  mutate(blackjpercc = blackjperc * 100)
   
+
+
+         
+map_countyj <- mapcountyfips %>%
+  left_join(mapdf, by = "fips")
+         
+blank_theme <- theme_bw() +
+  theme(
+    axis.line = element_blank(),       
+    axis.text = element_blank(),        
+    axis.ticks = element_blank(),       
+    axis.title = element_blank(),       
+    plot.background = element_blank(),  
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank(), 
+    panel.border = element_blank()
+  )
+  
+  
+
+
+mapcountyfips <- readRDS('~/Documents/info201assignments/a3-andrewle7/source/county_map_fips.RDS')
+                        
+jpercmap <-   ggplot(data = map_countyj, mapping = aes(x = long, y = lat, group = group)) +
+  geom_polygon(aes(fill = blackjpercc)) +
+    scale_fill_gradient(low = "blue", high = "red") +
+    coord_quickmap() +
+  maplabels +
+    blank_theme
+
+jpercmap <- jpercmap + guides(fill=guide_legend(title="Average Percent of Pop."))
