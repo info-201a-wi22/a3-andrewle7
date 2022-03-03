@@ -83,9 +83,8 @@ westtotalblackpop <- incar_trends %>%
   
 
 overtimedata <- incar_trends %>%
-  group_by(region) %>%
-  summarize (year = year,
-    blackjail = sum(black_jail_pop, na.rm = T),
+  group_by(year) %>%
+  summarize (blackjail = sum(black_jail_pop, na.rm = T),
              totalpop = sum(total_pop, na.rm = TRUE),
              totaljpop = sum(total_jail_pop, na.rm = T),
              blackjperc = blackjail/totaljpop,
@@ -96,19 +95,18 @@ overtimedata <- incar_trends %>%
              whiteperc = whitepop / totalpop,
              blackperc = blackpop / totalpop,
              whitejperc = whitejail/totaljpop)%>%
-filter(year >= 1990, region == "West")
+  filter(year >= 1990)
+
 
 #legend
-colors <- c("Incarcerated Black Population" = "darkred", "Incarcered White Population" = "steelblue", "Total White Population" = "yellow", "Total Black Population" = "green" )
+colors <- c("Jailed Black Population" = "darkred", "Jailed White Population" = "steelblue")
 
 overtimechart <- ggplot(data = overtimedata, aes(x=year)) +
-  geom_line(aes(y=blackjperc, color = "Incarcerated Black Population")) +
-  geom_line(aes(y=whitejperc, color = "Incarcered White Population")) +
-  geom_line(aes(y=whiteperc, color = "Total White Population")) +
-  geom_line(aes(y=blackperc, color = "Total Black Population")) +
+  geom_line(aes(y=blackjperc, color = "Jailed Black Population")) +
+  geom_line(aes(y=whitejperc, color = "Jailed White Population")) +
   labs(
     x = "Year",
-    y = "Percentage of Population (Total Or Incarcerated)",
+    y = "Percentage of Population (Jailed)",
     title = "Population Figures by Race in the US",
     subtitle = "Data from ggplot2() incar_trends data frame.",
     caption = "Assignment 3 Trends Over Time Chart",
@@ -116,4 +114,21 @@ overtimechart <- ggplot(data = overtimedata, aes(x=year)) +
   ) +
   scale_color_manual(values = colors)
 
-geom_map
+variabledata <- incar_trends %>%
+  select(black_jail_pop, total_jail_pop, black_pop_15to64, total_pop_15to64)%>%
+  summarize(blackjperc = black_jail_pop / total_jail_pop,
+         blackperc1564 = black_pop_15to64 / total_pop_15to64)%>%
+  filter(blackjperc < 1) %>%
+  round(4) * 100
+
+variableplot <- ggplot(data = variabledata) +
+  geom_point(mapping = aes(x=blackjperc, y=blackperc1564)) +
+  geom_smooth(mapping = aes(x=blackjperc, y=blackperc1564)) +
+  labs(
+    x = "Percent of Jail Population",
+    y = "Percent of Total Population (15-64)",
+    title = "Percent of Total and Jailed Population (Black)",
+    subtitle = "Data from ggplot2() incar_trends data frame.",
+    caption = "Assignment 3 Continuous Variables Chart",
+  )
+  
