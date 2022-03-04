@@ -72,33 +72,43 @@ westtotalblackpop <- incar_trends %>%
   round(4) * 100
   
 # Dataset for TOT Chart
-overtimedata <- incar_trends %>%
+overtimedatarace <- incar_trends %>%
   group_by(year) %>%
-  summarize (blackjail = mean(black_jail_pop, na.rm = TRUE),
-             totaljpop = mean(total_jail_pop, na.rm = TRUE),
-             blackjperc = blackjail/totaljpop,
-             whitejail = mean(white_jail_pop, na.rm = TRUE),
-             totaljpop = mean(total_jail_pop, na.rm = TRUE),
-             whitejperc = whitejail/totaljpop)%>%
+  summarize (totaljpop = mean(total_jail_pop, na.rm = TRUE),
+             blackjperc = mean(black_jail_pop, na.rm = T) /totaljpop,
+             whitejperc = mean(white_jail_pop, na.rm = T) / totaljpop,
+             asianjperc = mean(aapi_jail_pop, na.rm = TRUE) / totaljpop,
+            nativejperc = mean(native_jail_pop, na.rm = T) / totaljpop,
+            latinxjperc = mean(latinx_jail_pop, na.rm = T) / totaljpop,
+  ) %>%
   filter(year >= 1990)
 
 
 #legend
-colors <- c("Jailed Black Population" = "darkred", "Jailed White Population" = "steelblue")
+colors <- c("Jailed Black Population" = "darkred", 
+            "Jailed White Population" = "steelblue", 
+            "Jailed Latinx Population" = "darkgreen", 
+            "Jailed Asian Population" = "yellow", 
+            "Jailed Native Population" = "black")
 
+#labels
+totlabels <- labs(
+  x = "Year",
+  y = "Percentage of Population (Jailed)",
+  title = "Average Population Figures by Race in the US",
+  subtitle = "Data Averaged Over 1990-2018",
+  caption = "Data taken from Vera dataset",
+  color = "Legend"
+)
 #Trends over Time Chart
 
-overtimechart <- ggplot(data = overtimedata, aes(x=year)) +
+overtimechart <- ggplot(data = overtimedatarace, aes(x=year)) +
   geom_line(aes(y=blackjperc, color = "Jailed Black Population")) +
   geom_line(aes(y=whitejperc, color = "Jailed White Population")) +
-  labs(
-    x = "Year",
-    y = "Percentage of Population (Jailed)",
-    title = "Population Figures by Race in the US",
-    subtitle = "Data from ggplot2() incar_trends data frame.",
-    caption = "Assignment 3 Trends Over Time Chart",
-    color = "Legend"
-  ) +
+  geom_line(aes(y=asianjperc, color = "Jailed Asian Population")) +
+  geom_line(aes(y=latinxjperc, color = "Jailed Latinx Population")) +
+  geom_line(aes(y=nativejperc, color = "Jailed Native Population")) +
+  totlabels +
   scale_color_manual(values = colors)
 
 #Continuous Variable Dataset
